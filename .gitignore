@@ -1,0 +1,3 @@
+node_modules/
+.env
+# Add any other environment files or directories you want to exclude
