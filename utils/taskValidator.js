@@ -8,12 +8,12 @@ class IError {
 async function validateCreateTask(payload) {
     const errors = [];
 
-    if (payload === null) {
+    if (payload === null || JSON.stringify(payload) === "{}" || !payload) {
         errors.push(new IError("payload", "Payload is required"));
         return errors;
     }
 
-    const { name, description } = payload;
+    const { name, description, priority } = payload;
 
     if (name == null || name === "") {
         errors.push(new IError("name", "Name is required"));
@@ -25,6 +25,11 @@ async function validateCreateTask(payload) {
         return errors;
     }
 
+    if (priority == null || priority === "") {
+        errors.push(new IError("priority", "Priority is required"));
+        return errors;
+    }
+
     return errors;
 }
 
@@ -32,7 +37,7 @@ async function validateUpdateTask(id, payload) {
     const errors = [];
     validateId(id)
 
-    if (payload == null || JSON.stringify(payload) === "{}") {
+    if (payload == null || JSON.stringify(payload) === "{}" || !payload) {
         errors.push(new IError("payload", "Payload is required"));
         return errors;
     }

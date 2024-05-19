@@ -89,9 +89,6 @@ class AuthService {
             }
 
             if (existingUser.isVerified === false) {
-                console.log("line 93:", existingUser.otp)
-                // if (existingUser.otp == null) {
-
                 const verificationCode = generateOtp();
                 const otpExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
@@ -101,9 +98,9 @@ class AuthService {
                     `Your verification code is: ${verificationCode}`
                 );
 
-                await existingUser.updateOne({ otp: verificationCode, otpExpiry });
-                console.log("line 106:", existingUser.otp)
-                // }
+                existingUser.otp = verificationCode;
+                existingUser.otpExpiry = otpExpiry;
+                await existingUser.save();
 
                 throw new Unauthorized(
                     "User is not verified, check your email for verification code"
