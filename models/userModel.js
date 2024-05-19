@@ -48,9 +48,10 @@ userSchema.methods.toJSON = function () {
     delete userObject.otp;
     delete userObject.createdAt;
     delete userObject.isVerified;
+    delete userObject.passwordResetToken;
+    delete userObject.passwordResetExpiry;
     delete userObject.updatedAt;
     delete userObject.__v;
-    delete userObject.isAdmin;
     delete userObject.otpExpiry;
 
     return userObject;
