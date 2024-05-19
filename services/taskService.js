@@ -31,7 +31,7 @@ class TaskService {
 
             const newTask = new TaskModel(reqBody);
             await newTask.save();
-            TaskService.emit('taskCreated', newTask.toJSON());
+            // TaskService.emit('taskCreated', newTask.toJSON());
 
             const resPayload = {
                 success: true,
@@ -116,7 +116,7 @@ class TaskService {
                 throw new ResourceNotFound("Task not found");
             }
 
-            TaskService.emit('taskUpdated', updatedTask.toJSON());
+            // TaskService.emit('taskUpdated', updatedTask.toJSON());
             const resPayload = {
                 success: true,
                 message: 'Task updated successfully',
