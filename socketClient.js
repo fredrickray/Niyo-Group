@@ -1,8 +1,6 @@
-const socketIo = require('socket.io');
+const TaskService = require('./services/taskService');
 
-function initializeSocket(server) {
-    const io = socketIo(server);
-
+function initializeSocket(io) {
     io.on('connection', (socket) => {
         console.log('A client connected:', socket.id);
 
@@ -10,24 +8,19 @@ function initializeSocket(server) {
             console.log('A client disconnected:', socket.id);
         });
 
-        // Additional event handlers
-        socket.on('taskCreated', (task) => {
-            console.log('New task created:', task);
+        // Emit events to clients when tasks are created, updated, or deleted
+        TaskService.on('taskCreated', (task) => {
             io.emit('taskCreated', task);
         });
 
-        socket.on('taskUpdated', (task) => {
-            console.log('Task updated:', task);
+        TaskService.on('taskUpdated', (task) => {
             io.emit('taskUpdated', task);
         });
 
-        socket.on('taskDeleted', (taskId) => {
-            console.log('Task deleted:', taskId);
+        TaskService.on('taskDeleted', (taskId) => {
             io.emit('taskDeleted', taskId);
         });
     });
-
-    return io;
 }
 
 module.exports = initializeSocket;

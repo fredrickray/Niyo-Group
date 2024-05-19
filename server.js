@@ -6,6 +6,7 @@ const { errorHandler, routeNotFound } = require("./middlewares/errorHandler");
 const connectDB = require("./config/db");
 const indexRouter = require("./routes/index");
 const initializeSocket = require('./socketClient');
+const socketIo = require('socket.io');
 
 dotenv.config();
 const port = process.env.PORT || 7777;
@@ -13,14 +14,16 @@ const port = process.env.PORT || 7777;
 
 const app = express();
 const server = http.createServer(app);
-const io = initializeSocket(server);
+const io = socketIo(server);
 
-io.on('connection', (socket) => {
-    console.log('A client connected');
-    socket.on('disconnect', () => {
-        console.log('A client disconnected');
-    });
-});
+initializeSocket(io);
+
+// io.on('connection', (socket) => {
+//     console.log('A client connected');
+//     socket.on('disconnect', () => {
+//         console.log('A client disconnected');
+//     });
+// });
 
 app.get('/', (req, res) => {
     res.send({
@@ -29,10 +32,22 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use((req, res, next) => {
-    req.io = io;
-    next();
-});
+// app.use((req, res, next) => {
+//     req.io = io;
+//     next();
+// });
+
+app.use(
+    cors({
+        origin: ["*", "http://localhost:3000", "http://127.0.0.1:5173/"],
+        optionsSuccessStatus: 200,
+        credentials: true,
+        allowedHeaders: ['X-Requested-With', 'Content-Type', 'Authorization'],
+        methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    })
+);
+
+app.options("*", cors())
 
 app.set("view engine", "ejs")
 app.use(express.json());

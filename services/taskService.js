@@ -1,4 +1,5 @@
 const { TaskModel } = require("../models/taskModel");
+const EventEmitter = require("events");
 const { isValidObjectId } = require("mongoose");
 const {
     BadRequest,
@@ -30,7 +31,7 @@ class TaskService {
 
             const newTask = new TaskModel(reqBody);
             await newTask.save();
-            req.io.emit('taskCreated', newTask.toJSON());
+            TaskService.emit('taskCreated', newTask.toJSON());
 
             const resPayload = {
                 success: true,
@@ -115,7 +116,7 @@ class TaskService {
                 throw new ResourceNotFound("Task not found");
             }
 
-            req.io.emit('taskUpdated', updatedTask);
+            TaskService.emit('taskUpdated', updatedTask.toJSON());
             const resPayload = {
                 success: true,
                 message: 'Task updated successfully',
