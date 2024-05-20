@@ -6,7 +6,7 @@ const { errorHandler, routeNotFound } = require("./middlewares/errorHandler");
 const connectDB = require("./config/db");
 const indexRouter = require("./routes/index");
 const initializeSocket = require('./socketClient');
-const socketIo = require('socket.io');
+const socketIo = require("socket.io");
 
 dotenv.config();
 const port = process.env.PORT || 7777;
@@ -15,8 +15,6 @@ const port = process.env.PORT || 7777;
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
-
-initializeSocket(io);
 
 // io.on('connection', (socket) => {
 //     console.log('A client connected');
@@ -39,7 +37,7 @@ app.get('/', (req, res) => {
 
 app.use(
     cors({
-        origin: ["*", "http://localhost:3000", "http://127.0.0.1:5173/"],
+        origin: ["*", "http://localhost:3000", "http://127.0.0.1:5173"],
         optionsSuccessStatus: 200,
         credentials: true,
         allowedHeaders: ['X-Requested-With', 'Content-Type', 'Authorization'],
@@ -47,7 +45,7 @@ app.use(
     })
 );
 
-app.options("*", cors())
+app.options("*", cors());
 
 app.set("view engine", "ejs")
 app.use(express.json());

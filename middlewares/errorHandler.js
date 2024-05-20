@@ -61,7 +61,6 @@ const routeNotFound = (req, res, next) => {
 const errorHandler = (err, req, res, _next) => {
     let statusCode = err.status || 500;
     let cleanedMessage = (statusCode === 500 ? "Internal Server Error" : err.message).replace(/"/g, "");
-    console.log(err)
     const responsePayload = {
         success: false,
         message: cleanedMessage,
